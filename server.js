@@ -4,12 +4,13 @@ require('dotenv').config();
 const app = express()
 const mongoURI = process.env.MONGO_URI
 const mongoose = require("mongoose");
-const PORT = 5000
-const userRoutes = require('./routes/userRoutes');
+const PORT = 5000;
+const userRoutes = require('./routes/userRoutes'); 
 const routeRoutes = require('./routes/routeRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const customerRoutes = require('./routes/customerRoutes');
 const driverRoutes = require('./routes/driverRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 
 app.use(express.json())
@@ -49,7 +50,10 @@ app.use('/api', customerRoutes);
 app.use('/api', routeRoutes);
 app.use('/api', transactionRoutes);
 app.use('/api', driverRoutes);
+app.use('/api', productRoutes);
+
 app.use("/api/admin",require("./routes/adminRoutes"))
+
 
 
 

@@ -17,7 +17,7 @@ exports.createCustomer = async (req, res) => {
     }
 
     // Create a new customer
-    const customer = new Customer({ name, email, mobileNo, location, address,userId,route });
+    const customer = new Customer({ name, email, mobileNo, location, address,userId});
     await customer.save();
     
     console.log('Customer created:', customer);

@@ -136,24 +136,27 @@ exports.getProductsForUser = async (req, res) => {
 };
 
 exports.addProductForUser = async (req, res) => {
-  try {
-    const userId = req.params.userId; // Extracted from JWT token in authentication middleware
-    const { name, description, price } = req.body;
-    if (!name || !description || !price) {
-      return res.status(400).json({ error: 'Name, description, and price are required for the product.' });
-    }
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: 'User not found.' });
-    }
-    const productId = uuid.v4();
-    user.products.push({ productId,name, description, price });
-    await user.save();
-    res.status(201).json({ message: 'Product added successfully for the user.', user });
-  } catch (error) {
-    console.error('Error adding product for user:', error);
-    res.status(500).json({ error: 'Error adding product for user.' });
-  }
+  res.status(201).json({ message: 'ALL GOOD' });
+  // try {
+  //   const userId = req.params.userId; // Extracted from JWT token in authentication middleware
+  //   const { name, description, price } = req.body;
+  //   if (!name || !description || !price) {
+  //     return res.status(400).json({ error: 'Name, description, and price are required for the product.' });
+  //   }
+  //   const user = await User.findById(userId);
+  //   if (!user) {
+  //     return res.status(404).json({ error: 'User not found.' });
+  //   }
+
+  //   console.log("I got here--------------------------------- b sfjowfjowfjwoefjow----------");
+  //   const productId = uuid.v4();
+  //   user.products.push({ productId,name, description, price });
+  //   await user.save();
+  //   res.status(201).json({ message: 'Product added successfully for the user.', user });
+  // } catch (error) {
+  //   console.error('Error adding product for user:', error);
+  //   res.status(500).json({ error: 'Error adding product for user.' });
+  // }
 };
 
 // Update a product for the authenticated user
