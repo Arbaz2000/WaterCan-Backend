@@ -51,7 +51,7 @@ exports.verifyDriverCredentials = async (req, res) => {
 
     // Find the user in the database by email
     const driver = await Driver.findOne({ email }).select('+password');
-    // console.log("user :",user)
+    console.log("user :",driver)
     // If user not found, return error
     if (!driver) {
       return res.status(404).json({ error: 'driver not found' });
