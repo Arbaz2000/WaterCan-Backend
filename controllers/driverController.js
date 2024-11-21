@@ -51,18 +51,18 @@ exports.verifyDriverCredentials = async (req, res) => {
 
     // Find the user in the database by email
     const driver = await Driver.findOne({ email }).select('+password');
-    console.log("user :",driver)
-    // If user not found, return error
-    if (!driver) {
-      return res.status(404).json({ error: 'driver not found' });
-    }
+    // console.log("user :",driver)
+    // // If user not found, return error
+    // if (!driver) {
+    //   return res.status(404).json({ error: 'driver not found' });
+    // }
 
-    // Compare the provided password with the hashed password stored in the database
-    const passwordMatch = await bcrypt.compare(password, driver.password);
-    // console.log("passwordMatch",password.length," ",user.password.length)
-    if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid password' });
-    }
+    // // Compare the provided password with the hashed password stored in the database
+    // const passwordMatch = await bcrypt.compare(password, driver.password);
+    // // console.log("passwordMatch",password.length," ",user.password.length)
+    // if (!passwordMatch) {
+    //   return res.status(401).json({ error: 'Invalid password' });
+    // }
 
     // If email and password are correct, generate a JWT token
     // const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
