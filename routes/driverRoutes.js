@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-const {createDriver,getDriverById,verifyDriverCredentials,getAllDrivers} = require('../controllers/driverController');
+const {createDriver,getDriverById,verifyDriverCredentials,getAllDrivers, deleteDriver} = require('../controllers/driverController');
 
 // Register a driver
 // ? Working
@@ -10,6 +10,7 @@ router.post('/new-driver', createDriver);
 // Get a Driver by ID
 // ? Working
 router.get('/driver/:id', getDriverById);
+router.delete('/delete-driver/:driverId', deleteDriver);
 
 // ? Working
 router.get('/get-drivers',getAllDrivers)
