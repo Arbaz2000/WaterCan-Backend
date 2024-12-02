@@ -77,6 +77,7 @@ exports.verifyDriverCredentials = async (req, res) => {
 exports.getAllDrivers = async (req, res) => {
   try {
     const drivers = await Driver.find();
+    console.log("hello testing")
     res.status(200).json(drivers);
   } catch (error) {
     console.error('Error getting customers:', error);
