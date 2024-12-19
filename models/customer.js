@@ -8,7 +8,7 @@ const customerSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     mobileNo: { type: String, required: true },
-    location: { type: String, required: true },
+    location: { type: String, required: false },
     address: { type: String, required: true },
     dueAmt:{type:Number,default: 0 ,required:true},
     txnDate :{type:String},
@@ -16,7 +16,7 @@ const customerSchema = new mongoose.Schema({
     // Add reference to the route associated with the customer
     route: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Route'
+        ref: 'Route',
     }
 });
 

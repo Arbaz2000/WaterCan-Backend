@@ -6,7 +6,7 @@ exports.createCustomer = async (req, res) => {
   try {
     const userId = req.params.userId
     const { name, email, mobileNo, location, address,route } = req.body;
-    if (!name || !email || !mobileNo || !location || !address || !route) {
+    if (!name || !email || !mobileNo || location || !address || !route) {
       return res.status(400).json({message: 'All fields are required' });
     }
 
@@ -17,14 +17,14 @@ exports.createCustomer = async (req, res) => {
     }
 
     // Create a new customer
-    const customer = new Customer({ name, email, mobileNo, location, address,userId});
+    const customer = new Customer({ name, email, mobileNo, location, address, userId});
     await customer.save();
     
     console.log('Customer created:', customer);
     res.status(201).json({ success: true, message: 'Customer created successfully', customer });
   } catch (error) {
     console.error('Error creating customer:', error);
-    res.status(500).json({ message : 'Error creating customer' });
+    res.status(500).json({ message : 'Error creating customer from backend' });
   }
 };
 
