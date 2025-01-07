@@ -41,39 +41,51 @@ exports.getDriverById = async (req, res) => {
 
 
 exports.verifyDriverCredentials = async (req, res) => {
-  // console.log("HI",req.body.message)
   try {
-    console.log("Verify :",req.body);
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required' });
+    console.log("Verify:", req.body);
+    const { email, password, mobileNo } = req.body;
+
+    // Check if either email/password or mobileNo is provided
+    if (!email && !mobileNo) {
+      return res.status(400).json({ error: 'Email or mobile number is required' });
     }
 
-    // Find the user in the database by email
-    const driver = await Driver.findOne({ email }).select('+password');
-    console.log("user :",driver)
-    // If user not found, return error
+    // Try to find the driver based on email or mobileNo
+    let driver;
+    if (email) {
+      // Find the driver by email
+      driver = await Driver.findOne({ email }).select('+password +mobileNo');
+    } else if (mobileNo) {
+      // Find the driver by mobile number
+      driver = await Driver.findOne({ mobileNo }).select('+password +email');
+    }
+
+    // If driver not found, return error
     if (!driver) {
-      return res.status(404).json({ error: 'driver not found' });
+      return res.status(404).json({ error: 'Driver not found' });
     }
 
-    // Compare the provided password with the hashed password stored in the database
-    const passwordMatch = await bcrypt.compare(password, driver.password);
-    // console.log("passwordMatch",password.length," ",user.password.length)
-    if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid password' });
+    // If both email and password are provided, validate them
+    if (email && password) {
+      const passwordMatch = await bcrypt.compare(password, driver.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ error: 'Invalid password' });
+      }
     }
 
-    // If email and password are correct, generate a JWT token
-    // const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+    // If mobileNo is provided, validate it
+    if (mobileNo && driver.mobileNo !== mobileNo) {
+      return res.status(401).json({ error: 'Invalid mobile number' });
+    }
 
-    // Return success response with JWT token and user details
-    res.status(200).json({ success: true, message: 'Login successful',  driver });
+    // If login is successful, return the driver details
+    res.status(200).json({ success: true, message: 'Login successful', driver });
   } catch (error) {
     console.error('Error verifying driver credentials:', error);
     res.status(500).json({ error: 'Error verifying driver credentials' });
   }
 };
+
 exports.getAllDrivers = async (req, res) => {
   try {
     const drivers = await Driver.find();

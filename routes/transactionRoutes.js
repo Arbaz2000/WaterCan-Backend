@@ -1,23 +1,19 @@
-const express = require('express')
+const express = require("express");
 const router = express.Router();
 
-const {createTransaction,transactionHistory,customerTransactions} = require('../controllers/transactionController');
+const {
+  createTransaction,
+  transactionHistory,
+  customerTransactions,
+} = require("../controllers/transactionController");
 
+// Create a new transaction
+router.post("/transaction/:userId", createTransaction);
 
-// Create a new transcation
-router.post('/transaction/:userId', createTransaction);
+// Get All Transactions (no userId filter anymore)
+router.get("/transaction-history", transactionHistory); // Removed userId from the path
 
+// Get Transactions for a specific customer under a userId
+router.get("/transaction/:userId/:customerId", customerTransactions);
 
-//Get All Transaction
-// !500 Internal Server Error The server has encountered a situation it does not know how to handle.
-router.get('/transaction-history/:userId',transactionHistory);
-
-// !500 Internal Server Error The server has encountered a situation it does not know how to handle.
-router.get('/transaction/:userId/:customerId',customerTransactions);
-
-// router.post('/transaction/send-email',generateEmailToCustomer);
-// Get a Transaction by ID
-// router.get('/transaction/:id', getTransactionById);
-
-
-module.exports=router;
+module.exports = router;

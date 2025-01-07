@@ -81,13 +81,12 @@ exports.createTransaction = async (req, res) => {
 
 exports.transactionHistory = async (req, res) => {
   try {
-    const userId = req.params.userId;
-    // Fetch all transaction from the database
-    const transactions = await Transaction.find({ userId });
-    console.log("Transactions :", userId, transactions);
+    // Fetch all transactions from the database
+    const transactions = await Transaction.find(); // Remove the userId filter
+    console.log("All Transactions:", transactions);
     res.status(200).json({ success: true, transactions });
   } catch (error) {
-    console.error("Error fetching Transaction:", error);
+    console.error("Error fetching transactions:", error);
     res.status(500).json({ error: "Error fetching transactions" });
   }
 };
