@@ -6,7 +6,7 @@ exports.createCustomer = async (req, res) => {
   try {
     const userId = req.params.userId
     const { name, email, mobileNo, location, address,route } = req.body;
-    if (!name || !email || !mobileNo || location || !address || !route) {
+    if (!name || !email || !mobileNo || !location || !address || !route) {
       return res.status(400).json({message: 'All fields are required' });
     }
 
