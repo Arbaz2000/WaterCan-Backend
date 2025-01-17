@@ -55,23 +55,16 @@ exports.createCustomer = async (req, res) => {
 };
 exports.getAllCustomers = async (req, res) => {
   try {
-    // Fetch all customers from the database
-    const customers = await Customer.find();
-
-    // If no customers are found, send an appropriate response
-    if (customers.length === 0) {
-      return res.status(404).json({ message: 'No customers found.' });
-    }
-
-    // Send the customers data as the response
+    
+    const {userId} = req.body
+    // console.log("USER ID :",req.body)
+    const customers = await Customer.find({userId});
     res.status(200).json(customers);
   } catch (error) {
     console.error('Error getting customers:', error);
     res.status(500).json({ error: 'Error getting customers' });
   }
 };
-
-
 
 // Read 
 exports.getCustomerById = async (req, res) => {
