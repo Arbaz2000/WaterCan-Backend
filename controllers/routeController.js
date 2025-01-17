@@ -56,48 +56,47 @@ exports.createRoute = async (req, res) => {
   }
 };
 
+exports.deleteRoute = async (req, res) => {
+  try {
+    const { routeId } = req.params;
+    const route = await Route.findById(routeId);
+    if (!route) {
+      return res.status(404).json({ error: `Route with ID ${routeId} not found` });
+    }
+
+    // Use deleteOne instead of remove
+    await Route.deleteOne({ _id: routeId });
+
+    res.status(200).json({ success: true, message: "Route deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting route:", error);
+    res.status(500).json({ error: "Error deleting route. Please try again" });
+  }
+};
+
+
+
 exports.updateRouteWithCustomersFromAdmin = async (req, res) => {
   try {
-    const routeId = req.params.routeId;
+    const { routeId } = req.params;
+    const { customers, driver } = req.body;
 
-    // Find the route by ID
-    let route = await Route.findById(routeId);
-
-    // If the route doesn't exist, throw an error
+    const route = await Route.findById(routeId);
     if (!route) {
-      throw new Error(`Route with ID ${routeId} not found`);
+      return res.status(404).json({ error: "Route not found" });
     }
 
-    // Iterate over the new customer IDs and add them to the route's customers array
-    const customerIds = req.body;
-    if (!customerIds || !Array.isArray(customerIds)) {
-      throw new Error("Invalid customer IDs provided");
-    }
+    // Update the customers array
+    route.customers = customers; // This will replace the current customers with the new list
+    route.driver = driver; // Update the driver if necessary
 
-    for (const customerId of customerIds) {
-      // Check if the customer exists
-      const customer = await Customer.findById(customerId);
-      if (!customer) {
-        console.error(`Customer with ID ${customerId} not found`);
-        continue; // Skip this iteration and move to the next customer ID
-      }
-
-      // Add customer ID to the customers array if it's not already present
-      route.customers.addToSet(customerId);
-    }
-    // Save the route
+    // Save the updated route
     await route.save();
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "Customers added to route successfully",
-        route,
-      });
-    return route;
+
+    res.status(200).json({ success: true, route });
   } catch (error) {
-    console.error("Error updating route with customers:", error);
-    res.status(500).json({ error: "Error updating route with customers" });
+    console.error("Error updating route:", error);
+    res.status(500).json({ error: "Error updating route" });
   }
 };
 
@@ -175,10 +174,14 @@ exports.updateRouteWithCustomers = async (req, res) => {
 
 exports.getRoutes = async (req, res) => {
   try {
-    const userId = req.body.userId;
-    // Fetch all routes from the database
+    const { userId } = req.query; // Access userId from query parameters
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    // Fetch all routes from the database for the given userId
     const routes = await Route.find({ user: userId });
-    // console.log(routes)
+
     // Return the routes
     res.status(200).json({ success: true, routes });
   } catch (error) {
@@ -186,6 +189,7 @@ exports.getRoutes = async (req, res) => {
     res.status(500).json({ error: "Error fetching routes" });
   }
 };
+
 
 exports.routesGet = async (req, res) => {
   try {

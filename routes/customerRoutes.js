@@ -9,7 +9,7 @@ router.post('/customers/to/:userId', createCustomer);
 
 // router.post('/customers', createCustomer);
 // ?200 OK Request successful. The server has responded as required.
-router.post('/get-customers',getAllCustomers);
+router.get('/get-customers',getAllCustomers);
 
 
 // Get a customer by ID

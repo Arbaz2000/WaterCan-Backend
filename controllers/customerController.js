@@ -4,42 +4,75 @@ const mongoose = require('mongoose')
 // Create 
 exports.createCustomer = async (req, res) => {
   try {
-    const userId = req.params.userId
-    const { name, email, mobileNo, location, address,route } = req.body;
+    const userId = req.params.userId;
+    const { name, email, mobileNo, location, address, route } = req.body;
+
+    // Validate required fields
     if (!name || !email || !mobileNo || !location || !address || !route) {
-      return res.status(400).json({message: 'All fields are required' });
+      return res.status(400).json({ message: 'All fields are required' });
     }
 
     // Check if a customer with the provided email already exists
-    const existingCustomer = await Customer.findOne({ email,userId });
+    const existingCustomer = await Customer.findOne({ email, userId });
     if (existingCustomer) {
       return res.status(400).json({ message: 'Customer with this email already exists' });
     }
 
-    // Create a new customer
-    const customer = new Customer({ name, email, mobileNo, location, address, userId});
+    // Create a new customer and assign to the route
+    const customer = new Customer({ 
+      name, 
+      email, 
+      mobileNo, 
+      location, 
+      address, 
+      userId, 
+      route // Assign the route field with the selected route's ID
+    });
+
+    // Save the new customer to the database
     await customer.save();
-    
-    console.log('Customer created:', customer);
-    res.status(201).json({ success: true, message: 'Customer created successfully', customer });
+
+    // Optionally, add the customer to the route's customer list (if your Route model has such a field)
+    const selectedRoute = await Route.findById(route);
+    if (!selectedRoute) {
+      return res.status(400).json({ message: 'Route not found' });
+    }
+
+    // If route has a 'customers' array, add the customer to it
+    selectedRoute.customers.push(customer._id);
+    await selectedRoute.save();
+
+    console.log('Customer created and added to route:', customer);
+    res.status(201).json({
+      success: true,
+      message: 'Customer created and associated with route successfully',
+      customer
+    });
   } catch (error) {
     console.error('Error creating customer:', error);
-    res.status(500).json({ message : 'Error creating customer from backend' });
+    res.status(500).json({ message: 'Error creating customer from backend' });
   }
 };
-
 exports.getAllCustomers = async (req, res) => {
   try {
-    
-    const {userId} = req.body
-    // console.log("USER ID :",req.body)
-    const customers = await Customer.find({userId});
+    // Fetch all customers from the database
+    const customers = await Customer.find();
+
+    // If no customers are found, send an appropriate response
+    if (customers.length === 0) {
+      return res.status(404).json({ message: 'No customers found.' });
+    }
+
+    // Send the customers data as the response
     res.status(200).json(customers);
   } catch (error) {
     console.error('Error getting customers:', error);
     res.status(500).json({ error: 'Error getting customers' });
   }
 };
+
+
+
 // Read 
 exports.getCustomerById = async (req, res) => {
   try {
