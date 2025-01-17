@@ -109,19 +109,6 @@ exports.deleteDriver = async (req, res) => {
     if (!driver) {
       return res.status(404).json({ error: 'Customer not found' });
     }
-    // TODO: DO IT LATOR
-    // // Find the route associated with the customer
-    // const routeId = customer.route;
-    // const route = await Route.findById(routeId);
-    // if (!route) {
-    //   return res.status(404).json({ error: 'Route not found for the customer' });
-    // }
-
-    // // Remove the customer's ID from the route's customers array
-    // route.customers.pull(customerId);
-    // await route.save();
-
-    // Delete the customer from the database
     await Driver.findByIdAndDelete(driverId);
 
     console.log('Driver deleted successfully');
