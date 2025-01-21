@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-
 const driverSchema = new mongoose.Schema({
     name: {
       type: String,
@@ -28,10 +27,7 @@ const driverSchema = new mongoose.Schema({
       required:true,
       select : true,
     },
-  //   userId: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'User'
-  // },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
   });
   
   driverSchema.pre("save", async function (next) {

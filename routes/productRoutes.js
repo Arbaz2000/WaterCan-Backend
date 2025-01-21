@@ -5,7 +5,7 @@ const { addProduct, getAllProducts, deleteProduct, updateProduct } = require('..
 
 // Register a driver
 // ? Working
-router.post('/addNewProduct', addProduct);
+router.post('/addNewProduct/:userId', addProduct);
 router.get('/getAllProducts', getAllProducts);
 router.delete('/products/:productId', deleteProduct);
 router.put('/products/:productId', updateProduct);

@@ -15,11 +15,7 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-//   userId: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'User'
-// },
-  // Add more fields as needed
+ userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 // Create a Product model based on the product schema

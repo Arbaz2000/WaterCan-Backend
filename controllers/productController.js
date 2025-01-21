@@ -2,12 +2,13 @@ const Product = require('../models/product');
 
 exports.addProduct = async (req, res) => {
   try {
+    const userId = req.params.userId;
     const { name, description, price } = req.body;
     if (!name || !description || !price) {
       return res.status(400).json({ error: 'All fields are required' });
     }
     console.log("hello i am called!!",req.body)
-    const prod = new Product({ productName: name, productDescription: description, productPrice: price });
+    const prod = new Product({ productName: name, productDescription: description, productPrice: price, userId });
     await prod.save();
     console.log('Product Added:', prod);
     res.status(201).json({ message: 'Product added successfully', prod });

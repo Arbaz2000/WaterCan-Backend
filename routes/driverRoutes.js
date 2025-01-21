@@ -5,7 +5,7 @@ const {createDriver,getDriverById,verifyDriverCredentials,getAllDrivers, deleteD
 
 // Register a driver
 // ? Working
-router.post('/new-driver', createDriver);
+router.post('/new-driver/:userId', createDriver);
 
 // Get a Driver by ID
 // ? Working
@@ -13,7 +13,7 @@ router.get('/driver/:id', getDriverById);
 router.delete('/delete-driver/:driverId', deleteDriver);
 
 // ? Working
-router.get('/get-drivers',getAllDrivers)
+router.get('/get-drivers/:userId',getAllDrivers)
 
 //! 401 Unauthorized The request is unauthenticated.(password error)
 router.post('/verify-driver', verifyDriverCredentials);

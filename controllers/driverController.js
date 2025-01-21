@@ -3,15 +3,29 @@ const bcrypt = require('bcrypt');
 // Create 
 exports.createDriver = async (req, res) => {
   try {
-    console.log("From frontend :",req.body)
+    const userId = req.params.userId;
+    console.log("From frontend:", req.body);
+
     const { name, email, mobileNo, password, address } = req.body;
+
+    // Check if all required fields are provided
     if (!name || !email || !mobileNo || !password || !address) {
       return res.status(400).json({ error: 'All fields are required' });
     }
-    const driver = new Driver({ name, email, mobileNo, password, address });
+
+    // Log userId and fields to ensure they are correct
+    console.log("User ID received:", userId);
+
+    // Create the new driver with the userId passed in the URL
+    const driver = new Driver({ name, email, mobileNo, password, address, userId });
+
+    // Save the driver to the database
     await driver.save();
+
     console.log('Driver created:', driver);
-    res.status(201).json({success:true, message: 'User created successfully', driver });
+
+    // Respond with success message
+    res.status(201).json({ success: true, message: 'User created successfully', driver });
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(500).json({ error: 'Error creating user' });
@@ -87,13 +101,12 @@ exports.verifyDriverCredentials = async (req, res) => {
 };
 
 exports.getAllDrivers = async (req, res) => {
+  const userId = req.params.userId;
   try {
-    const drivers = await Driver.find();
-    console.log("hello testing")
-    res.status(200).json(drivers);
+    const drivers = await Driver.find({ userId: userId }); // Assuming Driver is your model
+    res.json(drivers);
   } catch (error) {
-    console.error('Error getting customers:', error);
-    res.status(500).json({ error: 'Error getting customers' });
+    res.status(500).json({ message: 'Failed to fetch drivers' });
   }
 };
 
