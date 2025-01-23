@@ -2,7 +2,7 @@ const express = require("express")
 const cors = require('cors')
 require('dotenv').config();
 const app = express()
-const mongoURI = process.env.MONGO_URI
+const mongoURI = process.env.REACT_APP_MONGODB_URL;
 const mongoose = require("mongoose");
 const PORT = 9000;
 const userRoutes = require('./routes/userRoutes'); 
@@ -32,12 +32,12 @@ app.use(cors({ origin: "*" }))
 mongoose.set("strictQuery", false);
 mongoose
   .connect(
-    // "mongodb+srv://root:watercan123@cluster0.icrzmzw.mongodb.net/watercan"
-    "mongodb+srv://root:asdfasdf@cluster0.icrzmzw.mongodb.net/watercan"
+
+   `${mongoURI}`
   )
   .then((con) => console.log("connected to remote database"));
 
- // uIDkxtvbNjLber6v
+
 app.get("/",(req,res)=>{
     res.send("All is well!")
 } );
