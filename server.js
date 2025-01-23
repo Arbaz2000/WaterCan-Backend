@@ -33,7 +33,7 @@ mongoose.set("strictQuery", false);
 mongoose
   .connect(
     // "mongodb+srv://root:watercan123@cluster0.icrzmzw.mongodb.net/watercan"
-    "mongodb+srv://root:uIDkxtvbNjLber6v@cluster0.icrzmzw.mongodb.net/watercan"
+    "mongodb+srv://root:asdfasdf@cluster0.icrzmzw.mongodb.net/watercan"
   )
   .then((con) => console.log("connected to remote database"));
 
